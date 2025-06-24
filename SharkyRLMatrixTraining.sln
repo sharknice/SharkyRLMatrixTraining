@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharkyRLMatrixTraining", "SharkyRLMatrixTraining\SharkyRLMatrixTraining.csproj", "{DDB0C8ED-F8DF-4E15-BF21-6CBE6FB90ABF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DDB0C8ED-F8DF-4E15-BF21-6CBE6FB90ABF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDB0C8ED-F8DF-4E15-BF21-6CBE6FB90ABF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDB0C8ED-F8DF-4E15-BF21-6CBE6FB90ABF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDB0C8ED-F8DF-4E15-BF21-6CBE6FB90ABF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FB6D6264-EB38-4C44-8D9F-85BA38088C00}
+	EndGlobalSection
+EndGlobal
