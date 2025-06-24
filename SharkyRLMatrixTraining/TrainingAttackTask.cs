@@ -71,7 +71,7 @@ namespace SharkyRLMatrixTraining
             float endRward = 0;
             var cooldownReward = 0f;
             var kiteReward = 0f;
-            var state = new float[2];
+            var state = new float[3];
             var commander = UnitCommanders.FirstOrDefault();
             if (commander != null)
             {
@@ -85,6 +85,15 @@ namespace SharkyRLMatrixTraining
                 if (enemy != null)
                 {
                     state[1] = Vector2.Distance(commander.UnitCalculation.Position, enemy.Position);
+                    if (enemy.PreviousUnitCalculation != null && commander.UnitCalculation.PreviousUnitCalculation != null)
+                    {
+                        state[2] = Vector2.Distance(commander.UnitCalculation.Position, enemy.Position) - Vector2.Distance(commander.UnitCalculation.PreviousUnitCalculation.Position, enemy.PreviousUnitCalculation.Position); 
+                    }
+                    else
+                    {
+                        state[2] = 0;
+                    }
+
                     if (commander.UnitCalculation.Unit.WeaponCooldown > 0)
                     {
                         kiteReward = Vector2.Distance(commander.UnitCalculation.Position, enemy.Position) - 3f;
@@ -93,6 +102,7 @@ namespace SharkyRLMatrixTraining
                 else
                 {
                     state[1] = 0;
+                    state[2] = 0;
                     endRward = (commander.UnitCalculation.Unit.Health/commander.UnitCalculation.Unit.HealthMax) + ((commander.UnitCalculation.Unit.Shield/commander.UnitCalculation.Unit.ShieldMax) * .5f);
                     done = true;
                     cooldownReward = 1;
@@ -106,6 +116,7 @@ namespace SharkyRLMatrixTraining
                 done = true;
                 state[0] = 0;
                 state[1] = 0;
+                state[2] = 0;
                 var enemy = ActiveUnitData.EnemyUnits.Values.FirstOrDefault();
                 if (enemy != null)
                 {

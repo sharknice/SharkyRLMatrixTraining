@@ -28,10 +28,13 @@ namespace SharkyRLMatrixTraining
         }
 
         [RLMatrixObservation]
-        public float GetHealth() => myState[0];
+        public float GetWeaponCooldown() => myState[0];
 
         [RLMatrixObservation]
-        public float GetShield() => myState[1];
+        public float GetDistanceToEnemy() => myState[1];
+
+        [RLMatrixObservation]
+        public float GetVelocityToEnemy() => myState[2];
 
         [RLMatrixActionDiscrete(2)]
         public void ApplyForce(int action)

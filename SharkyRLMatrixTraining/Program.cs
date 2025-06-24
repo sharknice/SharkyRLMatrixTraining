@@ -6,7 +6,7 @@ using Sharky;
 Console.WriteLine("Starting Sharky Micro Training");
 
 var learningSetup = new PPOAgentOptions(
-    batchSize: 8,
+    batchSize: 16,
     ppoEpochs: 8,
     memorySize: 1000,
     gamma: 0.99f,
