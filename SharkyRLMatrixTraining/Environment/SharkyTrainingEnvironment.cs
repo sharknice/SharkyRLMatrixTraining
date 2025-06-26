@@ -1,5 +1,5 @@
 ﻿using RLMatrix.Toolkit;
-using Sharky;
+using Sharky.MicroTasks;
 
 namespace SharkyRLMatrixTraining
 {
@@ -18,23 +18,14 @@ namespace SharkyRLMatrixTraining
         /// <summary>
         /// RLMatrix Sharky Training Environment
         /// </summary>
-        /// <param name="myUnit">Your StarCraft 2 unit</param>
-        /// <param name="enemyUnit">The enemy StarCraft 2 unit</param>
+        /// <param name="myUnits">Your StarCraft 2 units</param>
+        /// <param name="enemyUnits">The enemy StarCraft 2 units</param>
         /// <param name="stepCount">Number of game steps to take between each played frame in StarCraft 2.</param>
-        public SharkyTrainingEnvironment(UnitTypes myUnit, UnitTypes enemyUnit, uint stepCount = 1)
+        public SharkyTrainingEnvironment(List<DesiredUnitsClaim> myUnits, List<DesiredUnitsClaim> enemyUnits, uint stepCount = 1)
         {
-            myEnv = new MicroGym(myUnit, enemyUnit, stepCount);
+            myEnv = new MicroGym(myUnits, enemyUnits, stepCount);
             ResetEnvironment();
         }
-
-        [RLMatrixObservation]
-        public float GetWeaponCooldown() => myState[0];
-
-        [RLMatrixObservation]
-        public float GetDistanceToEnemy() => myState[1];
-
-        [RLMatrixObservation]
-        public float GetVelocityToEnemy() => myState[2];
 
         [RLMatrixActionDiscrete(2)]
         public void ApplyForce(int action)
@@ -59,24 +50,6 @@ namespace SharkyRLMatrixTraining
             {
                 isDone = true;
             }
-        }
-
-        [RLMatrixReward]
-        public float CalculateEndReward()
-        {
-            return myEndReward;
-        }
-
-        [RLMatrixReward]
-        public float CooldownReward()
-        {
-            return myCooldownReward;
-        }
-
-        [RLMatrixReward]
-        public float KiteReward()
-        {
-            return myKiteReward;
         }
 
         [RLMatrixDone]

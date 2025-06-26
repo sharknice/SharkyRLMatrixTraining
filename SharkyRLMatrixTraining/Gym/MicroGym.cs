@@ -13,13 +13,13 @@ namespace SharkyRLMatrixTraining
         SharkyBot Bot;
         TrainingAttackTask TrainingAttackTask;
 
-        UnitTypes MyUnit;
-        UnitTypes EnemyUnit;
+        List<DesiredUnitsClaim> MyUnits;
+        List<DesiredUnitsClaim> EnemyUnits;
 
-        public MicroGym(UnitTypes myUnit, UnitTypes enemyUnit, uint stepCount = 1)
+        public MicroGym(List<DesiredUnitsClaim> myUnits, List<DesiredUnitsClaim> enemyUnits, uint stepCount = 1)
         {
-            MyUnit = myUnit;
-            EnemyUnit = enemyUnit;
+            MyUnits = myUnits;
+            EnemyUnits = enemyUnits;
 
             GymGameConnection = new GymGameConnection(stepCount);
             DefaultSharkyBot = new DefaultSharkyBot(GymGameConnection);
@@ -65,8 +65,15 @@ namespace SharkyRLMatrixTraining
                 Bot.OnFrame(observation);
             }
 
-            DefaultSharkyBot.DebugService.SpawnUnit(MyUnit, new Point2D { X = DefaultSharkyBot.MapData.MapWidth / 2 - 2, Y = DefaultSharkyBot.MapData.MapHeight / 2 }, 1);
-            DefaultSharkyBot.DebugService.SpawnUnit(EnemyUnit, new Point2D { X = DefaultSharkyBot.MapData.MapWidth / 2 + 2, Y = DefaultSharkyBot.MapData.MapHeight / 2 }, 2);
+            foreach (var unit in MyUnits)
+            {
+                DefaultSharkyBot.DebugService.SpawnUnits(unit.UnitType, new Point2D { X = DefaultSharkyBot.MapData.MapWidth / 2 - 5, Y = DefaultSharkyBot.MapData.MapHeight / 2 }, 1, unit.Count);
+            }
+
+            foreach (var unit in EnemyUnits)
+            {
+                DefaultSharkyBot.DebugService.SpawnUnits(unit.UnitType, new Point2D { X = DefaultSharkyBot.MapData.MapWidth / 2 + 5, Y = DefaultSharkyBot.MapData.MapHeight / 2 }, 2, unit.Count);
+            }
 
             observation = await GymGameConnection.GetObservation();
             actions = Bot.OnFrame(observation);
@@ -81,17 +88,9 @@ namespace SharkyRLMatrixTraining
 
         public async Task<(float[] observation, float endReward, float cooldownReward, float kiteReward, bool done)> StepAsync(int action)
         {
-            List<SC2APIProtocol.Action> actions;
-            if (action == 0)
-            {
-                actions = TrainingAttackTask.Attack().ToList();
-            }
-            else
-            {
-                actions = TrainingAttackTask.Retreat().ToList();
-            }
-
+            var actions = TrainingAttackTask.PerformAction((ActionTypes)action);
             await GymGameConnection.SendActions(actions);
+
             var observation = await GymGameConnection.GetObservation();
             Bot.OnFrame(observation);
 
@@ -110,9 +109,9 @@ namespace SharkyRLMatrixTraining
 
         private bool ReadyToTrain(ResponseObservation? observation)
         {
-            if (observation.Observation.RawData.Units.Count == 2)
+            if (observation.Observation.RawData.Units.Count == MyUnits.Sum(u => u.Count) + EnemyUnits.Sum(u => u.Count))
             {
-                if (TrainingAttackTask.UnitCommanders.Count == 1)
+                if (TrainingAttackTask.UnitCommanders.Count == MyUnits.Sum(u => u.Count))
                 {
                     return true;
                 }
