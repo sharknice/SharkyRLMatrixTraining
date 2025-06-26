@@ -2,12 +2,13 @@
 using RLMatrix;
 using SharkyRLMatrixTraining;
 using Sharky;
+using Sharky.MicroTasks;
 
 Console.WriteLine("Starting Sharky Micro Training");
 
 var learningSetup = new PPOAgentOptions(
-    batchSize: 16,
-    ppoEpochs: 8,
+    batchSize: 32,
+    ppoEpochs: 16,
     memorySize: 1000,
     gamma: 0.99f,
     width: 128,
@@ -16,7 +17,9 @@ var learningSetup = new PPOAgentOptions(
 );
 
 // Create our environment
-var environment = new SharkyTrainingEnvironment(UnitTypes.PROTOSS_STALKER, UnitTypes.ZERG_ROACH, 3).RLInit(maxStepsSoft: 1200, maxStepsHard: 1200);
+var myUnits = new List<DesiredUnitsClaim> { new DesiredUnitsClaim(UnitTypes.PROTOSS_STALKER, 1) };
+var enemyUnits = new List<DesiredUnitsClaim> { new DesiredUnitsClaim(UnitTypes.ZERG_ROACH, 1) };
+var environment = new SharkyTrainingEnvironment(myUnits, enemyUnits, 3).RLInit(maxStepsSoft: 1200, maxStepsHard: 1200);
 var env = new List<IEnvironmentAsync<float[]>> {
     environment
 };
