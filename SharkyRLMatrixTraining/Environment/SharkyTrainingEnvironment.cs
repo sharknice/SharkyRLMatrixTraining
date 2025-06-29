@@ -7,7 +7,7 @@ namespace SharkyRLMatrixTraining
     public partial class SharkyTrainingEnvironment
     {
         private MicroGym myEnv;
-        private float[] myState;
+        private UnitState myState;
         private float myEndReward;
         private float myCooldownReward;
         private float myKiteReward;
@@ -28,7 +28,7 @@ namespace SharkyRLMatrixTraining
         }
 
         [RLMatrixActionDiscrete(2)]
-        public void ApplyForce(int action)
+        public void TakeAction(int action)
         {
             if (isDone)
             {
@@ -38,9 +38,9 @@ namespace SharkyRLMatrixTraining
             var task = myEnv.StepAsync(action);
             task.Wait();
 
-            (float[] observation, float endReward, float cooldownReward, float kiteReward, bool done) = task.Result;
+            (UnitState unitState, float endReward, float cooldownReward, float kiteReward, bool done) = task.Result;
 
-            myState = observation;
+            myState = unitState;
             myEndReward = endReward;
             myCooldownReward = cooldownReward;
             isDone = done;
@@ -71,7 +71,7 @@ namespace SharkyRLMatrixTraining
             myKiteReward = 0;
             myCooldownReward = 0;
             myKiteReward = 0;
-            myState = [0, 0, 0, 0, 0, 0];
+            myState = new UnitState();
             isDone = false;
             stepCounter = 0;
         }
