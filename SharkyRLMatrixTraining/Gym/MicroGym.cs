@@ -86,7 +86,7 @@ namespace SharkyRLMatrixTraining
             }
         }
 
-        public async Task<(UnitState unitState, float endReward, float cooldownReward, float kiteReward, bool done)> StepAsync(int action)
+        public async Task<TrainingState> StepAsync(int action)
         {
             var actions = TrainingAttackTask.PerformAction((ActionTypes)action);
             await GymGameConnection.SendActions(actions);

@@ -7,19 +7,19 @@ namespace SharkyRLMatrixTraining
         [RLMatrixReward]
         public float CalculateEndReward()
         {
-            return myEndReward;
+            return TrainingState.EndReward;
         }
 
         [RLMatrixReward]
         public float CooldownReward()
         {
-            return myCooldownReward;
+            return TrainingState.CooldownReward;
         }
 
         [RLMatrixReward]
         public float KiteReward()
         {
-            return myKiteReward;
+            return TrainingState.KiteReward;
         }
     }
 }
